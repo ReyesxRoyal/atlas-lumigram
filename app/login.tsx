@@ -1,5 +1,6 @@
 import { Colors } from '@/constants/Colors';
 import { Link, router } from 'expo-router';
+import React from 'react';
 import { StyleSheet, Text, View, TextInput, Image, Pressable } from 'react-native';
 
 export default function Login() {

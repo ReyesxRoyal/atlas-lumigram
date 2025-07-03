@@ -1,81 +1,90 @@
-import { MaterialIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { router, Tabs } from "expo-router";
-import { Pressable } from "react-native";
+import { Tabs, usePathname, router } from 'expo-router';
+import React from 'react';
+import { Platform, Button } from 'react-native';
+
+import { HapticTab } from '@/components/HapticTab';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import TabBarBackground from '@/components/ui/TabBarBackground';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { RectButton } from 'react-native-gesture-handler';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useAuth } from '@/components/AuthProvider';
 
 export default function TabLayout() {
-  function handleLogout() {
-    router.replace("/login");
-  }
+  const auth = useAuth();
+  const colorScheme = useColorScheme();
 
+  async function logout() {
+    await auth.logout();
+    router.replace('/');
+  }
   return (
     <Tabs
       screenOptions={{
-        headerTitleAlign: "left",
-        tabBarActiveTintColor: "#1DD2AF",
-        tabBarInactiveTintColor: "#999",
-        headerRight: () => (
-          <Pressable onPress={handleLogout} style={{ marginRight: 16 }}>
-            <MaterialIcons name="logout" size={24} color="#1DD2AF" />
-          </Pressable>
-        ),
-      }}
-    >
+        tabBarActiveTintColor: Colors.light.tint,
+        headerShown: false,
+        tabBarButton: HapticTab,
+        tabBarBackground: TabBarBackground,
+        tabBarStyle: Platform.select({
+          ios: {
+            // Use a transparent background on iOS to show the blur effect
+            position: 'absolute',
+          },
+          default: {
+            backgroundColor: '#fff',
+            display: usePathname() === '/(tabs)' ? 'none' : 'flex'
+          },
+        }),
+      }}>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: "Home Feed",
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? "home" : "home-outline"}
-              size={28}
-              color={color}
-            />
-          ),
+          title: 'Home',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          headerRight: () => <RectButton onPress={() => logout()}><MaterialIcons color={Colors.light.tint} size={28} name="logout" /></RectButton>,
+          headerTitle: "Home",
+          headerShown: true
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
-          tabBarIcon: ({ color }) => (
-            <Ionicons size={24} name="search" color={color} />
-          ),
+          title: 'Search',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="magnifyingglass" color={color} />,
+          headerRight: () => <RectButton onPress={() => logout()}><MaterialIcons color={Colors.light.tint} size={28} name="logout" /></RectButton>,
+          headerTitle: "Search",
+          headerShown: true
         }}
       />
       <Tabs.Screen
-        name="add"
+        name="add-post"
         options={{
-          title: "Add Post",
-          tabBarIcon: ({ color }) => (
-            <MaterialIcons size={24} name="add" color={color} />
-          ),
+          title: 'Add Post',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name='plus.circle' color={color} />,
+          headerRight: () => <RectButton onPress={() => logout()}><MaterialIcons color={Colors.light.tint} size={28} name="logout" /></RectButton>,
+          headerTitle: "Add a Post",
+          headerShown: true
         }}
       />
       <Tabs.Screen
         name="favorites"
         options={{
-          title: "Favorites",
-          tabBarIcon: ({ focused, color }) => (
-            <MaterialIcons
-              size={24}
-              name={focused ? "favorite" : "favorite-outline"}
-              color={color}
-            />
-          ),
+          title: 'Favorites',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name='heart' color={color} />,
+          headerRight: () => <RectButton onPress={() => logout()}><MaterialIcons color={Colors.light.tint} size={28} name="logout" /></RectButton>,
+          headerTitle: "Favorites",
+          headerShown: true
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="my-profile"
         options={{
-          title: "Profile",
-          tabBarIcon: ({ focused, color }) => (
-            <MaterialIcons
-              size={24}
-              name={focused ? "person" : "person-outline"}
-              color={color}
-            />
-          ),
+          title: 'Your Profile',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name='rectangle.portrait.fill' color={color} />,
+          headerRight: () => <RectButton onPress={() => logout()}><MaterialIcons color={Colors.light.tint} size={28} name="logout" /></RectButton>,
+          headerTitle: "Your profile",
+          headerShown: true
         }}
       />
     </Tabs>

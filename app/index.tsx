@@ -5,24 +5,24 @@ import { useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import React from "react";
 
-export default function Register() {
+export default function Index() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const auth = useAuth();
 
-    async function register() {
+    async function login() {
         try {
-            await auth.register(email, password);
-            router.replace('/(tabs)/home')
+            await auth.login(email, password);
+            router.replace('/(tabs)/home');
         } catch (error) {
-            alert("Could not create account. Please try again later");
+            alert("Email or password is incorrect");
         }
     }
     return (
         <View style={styles.container}>
             <Image style={styles.logo} source={require('@/assets/images/logo.png')} />
             <Text style={styles.header}>
-                Register
+                Login
             </Text>
             <TextInput
                 style={styles.input}
@@ -38,13 +38,13 @@ export default function Register() {
                 onChangeText={(value) => setPassword(value)}
             />
             <Pressable>
-                <Text style={styles.createAccount} onPress={() => register()}>
-                    Create account
+                <Text style={styles.loginButton} onPress={() => login()}>
+                    Sign in
                 </Text>
             </Pressable>
             <Pressable>
-                <Text style={styles.loginButton} onPress={() => { router.replace('/') }}>
-                    Login to existing account
+                <Text style={styles.registerButton} onPress={() => { router.replace('/register') }}>
+                    Create a new account
                 </Text>
             </Pressable>
         </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         alignContent: "center",
         backgroundColor: "#00003C",
         padding: 10,
-        width: "100%"
+        width: "100%",
     },
     header: {
         color: "#fff",
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         margin: 10
     },
-    createAccount: {
+    loginButton: {
         textAlign: "center",
         padding: 10,
         backgroundColor: Colors.light.tint,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 3
     },
-    loginButton: {
+    registerButton: {
         textAlign: "center",
         padding: 10,
         backgroundColor: "#00003C",
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
         color: Colors.dark.text,
         borderWidth: 1,
         borderRadius: 3,
-        marginBottom: 10
+        marginBottom: 10,
+        height: 50
     },
     logo: {
 
@@ -99,4 +100,9 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         alignSelf: "center"
     },
+    logoContainer: {
+        flex: 1,
+        width: "70%",
+        margin: "auto"
+    }
 })

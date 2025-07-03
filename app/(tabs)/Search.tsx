@@ -1,17 +1,13 @@
-import { View, Text, StyleSheet } from "react-native";
+import { Text, View } from "react-native";
+import { userSearch } from "@/placeholder";
+import React from "react";
 
-export default function Tab() {
+export default function Search() {
   return (
-    <View style={styles.container}>
-      <Text>Tab [Search]</Text>
+    <View>
+      <Text>
+        Search
+      </Text>
     </View>
-  );
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
